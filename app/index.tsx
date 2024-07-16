@@ -1,4 +1,10 @@
-import auth from '@react-native-firebase/auth';
+import { auth } from '@/firebaseConfig';
+import { createUser } from '@/services/users';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from 'firebase/auth';
+import { } from 'firebase/firestore'
 import { CustomText } from "@/components/CustomText";
 import { CustomTextInput } from "@/components/CustomTextInput";
 import React, { useState } from "react";
@@ -14,23 +20,22 @@ export default function Index() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleUser = () => {
+  const handleUser = async () => {
     console.log("Handle user")
-    auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then(() => {
-        console.log('User account created & signed in!');
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(async (userCredential) => {
+        await createUser(userCredential.user.uid, email);
+        console.log('User account created:', userCredential.user.uid);
       })
       .catch(error => {
         if (error.code === 'auth/email-already-in-use') {
-          auth()
-            .signInWithEmailAndPassword(email, password)
+          signInWithEmailAndPassword(auth, email, password)
             .then(() => {
               console.log("User was signed in")
             })
+        } else {
+          console.error(error);
         }
-
-        console.error(error);
       });
   };
 
@@ -67,7 +72,7 @@ export default function Index() {
           </View>
 
           <TouchableOpacity
-            onPress={() => {}}
+            onPress={() => { handleUser() }}
           >
             <View style={styles.buttonContainer}>
               <CustomText type="button">Sign up / Log in</CustomText>
