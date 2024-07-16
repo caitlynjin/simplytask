@@ -1,6 +1,7 @@
+import auth from '@react-native-firebase/auth';
 import { CustomText } from "@/components/CustomText";
 import { CustomTextInput } from "@/components/CustomTextInput";
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   View,
   StyleSheet,
@@ -14,7 +15,23 @@ export default function Index() {
   const [password, setPassword] = useState("");
 
   const handleUser = () => {
-    // TODO: Implement user sign up or log in
+    console.log("Handle user")
+    auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        console.log('User account created & signed in!');
+      })
+      .catch(error => {
+        if (error.code === 'auth/email-already-in-use') {
+          auth()
+            .signInWithEmailAndPassword(email, password)
+            .then(() => {
+              console.log("User was signed in")
+            })
+        }
+
+        console.error(error);
+      });
   };
 
   return (
@@ -50,7 +67,7 @@ export default function Index() {
           </View>
 
           <TouchableOpacity
-            onPress={handleUser}
+            onPress={() => {}}
           >
             <View style={styles.buttonContainer}>
               <CustomText type="button">Sign up / Log in</CustomText>
