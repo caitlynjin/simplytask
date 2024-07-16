@@ -1,4 +1,4 @@
-import { View, Text, type TextProps, StyleSheet } from 'react-native';
+import { Text, type TextProps, StyleSheet } from 'react-native';
 
 export type CustomTextProps = TextProps & {
   type: "title" | "subtitle" | "body" | "button"
