@@ -13,10 +13,10 @@ export const createUser = async (userId: string, email: string) => {
       email: email,
       userId: userId
     });
-    const tasksRef = collection(userRef, "tasks");
-    addDoc(tasksRef, {
-      // Create tasks collection without adding a task
-    })
+    // const tasksRef = collection(userRef, "tasks");
+    // addDoc(tasksRef, {
+    //   // Create tasks collection without adding a task
+    // })
   } catch (error) {
     console.error("Error creating user", error);
   }
