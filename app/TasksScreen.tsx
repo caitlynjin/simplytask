@@ -21,7 +21,7 @@ type Task = {
   inEdit: boolean;
 }
 
-export default function TasksScreen() {
+const TasksScreen = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -319,3 +319,5 @@ const styles = StyleSheet.create({
     height: 21
   }
 });
+
+export default TasksScreen;

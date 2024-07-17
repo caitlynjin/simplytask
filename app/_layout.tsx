@@ -3,11 +3,11 @@ import {
   NativeStackScreenProps }
 from "@react-navigation/native-stack";
 import SignUpScreen from './SignUpScreen';
-import TasksScreen from './TasksScreen';
+import BottomNav from './BottomNav';
 
 type RootStackParamList = {
   SignUpScreen: undefined,
-  TasksScreen: undefined
+  BottomNav: undefined
 };
 
 export type Props = NativeStackScreenProps<RootStackParamList, 'SignUpScreen'>;
@@ -23,8 +23,8 @@ export default function RootLayout() {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="TasksScreen"
-        component={TasksScreen}
+        name="BottomNav"
+        component={BottomNav}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

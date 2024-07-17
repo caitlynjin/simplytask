@@ -26,14 +26,14 @@ const SignUpScreen = ({ navigation }: Props) => {
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         await createUser(userCredential.user.uid, email);
-        navigation.navigate("TasksScreen");
+        navigation.navigate("BottomNav");
         console.log('User account created:', userCredential.user.uid);
       })
       .catch(error => {
         if (error.code === 'auth/email-already-in-use') {
           signInWithEmailAndPassword(auth, email, password)
             .then(() => {
-              navigation.navigate("TasksScreen");
+              navigation.navigate("BottomNav");
               console.log("User was signed in")
             })
         } else {
