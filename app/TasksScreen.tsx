@@ -1,20 +1,12 @@
 import { auth } from '@/firebaseConfig';
 import { createTask, getAllTasks, updateTask, deleteTask } from '@/services/tasks';
-import {
-  createUserWithEmailAndPassword,
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-} from 'firebase/auth';
 import { } from 'firebase/firestore'
 import { CustomText } from "@/components/CustomText";
-import { CustomTextInput } from "@/components/CustomTextInput";
 import React, { useState, useEffect } from "react";
 import {
   View,
   StyleSheet,
   TouchableOpacity,
-  TouchableWithoutFeedback,
-  Keyboard,
   Image,
   TextInput,
   ScrollView
