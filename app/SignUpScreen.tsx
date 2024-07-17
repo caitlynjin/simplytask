@@ -15,8 +15,9 @@ import {
   TouchableWithoutFeedback,
   Keyboard
 } from "react-native";
+import { Props } from './_layout';
 
-export default function Index() {
+const SignUpScreen = ({ navigation }: Props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -25,12 +26,14 @@ export default function Index() {
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         await createUser(userCredential.user.uid, email);
+        navigation.navigate("TasksScreen");
         console.log('User account created:', userCredential.user.uid);
       })
       .catch(error => {
         if (error.code === 'auth/email-already-in-use') {
           signInWithEmailAndPassword(auth, email, password)
             .then(() => {
+              navigation.navigate("TasksScreen");
               console.log("User was signed in")
             })
         } else {
@@ -109,3 +112,5 @@ const styles = StyleSheet.create({
     backgroundColor: "gray",
   },
 });
+
+export default SignUpScreen;
