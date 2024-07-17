@@ -53,7 +53,7 @@ export const getAllUsersSorted = async () => {
     // Get the list of users and the amount of tasks completed
     const usersRef = collection(db, "users");
     const usersSnap = await getDocs(usersRef);
-    const users = usersSnap.docs.map(async (userDoc) => {
+    const usersPromise = usersSnap.docs.map(async (userDoc) => {
       const taskCount = (await getCompletedTasks(userDoc.id)).length;
       return (
         new User(
@@ -63,10 +63,10 @@ export const getAllUsersSorted = async () => {
         )
       );
     });
-    const usersWithTasks = await Promise.all(users);
+    const users = await Promise.all(usersPromise);
 
     // Sort the list of users by their tasks completed in descending order
-    const usersSorted = usersWithTasks.sort((user1, user2) => {
+    const usersSorted = users.sort((user1, user2) => {
       return user2.tasksCompleted - user1.tasksCompleted;
     });
     return usersSorted;
