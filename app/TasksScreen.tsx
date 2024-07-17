@@ -1,5 +1,5 @@
 import { auth } from '@/firebaseConfig';
-import { createTask, getAllTasks, updateTask, deleteTask } from '@/services/tasks';
+import { createTask, getAllTasks, updateTask, deleteTask, completeTask } from '@/services/tasks';
 import { } from 'firebase/firestore'
 import { CustomText } from "@/components/CustomText";
 import React, { useState, useEffect } from "react";
@@ -15,10 +15,11 @@ import {
 type Task = {
   id: string;
   completed: boolean;
+  completedAt: Date;
   description: string;
   name: string;
   inEdit: boolean;
-};
+}
 
 export default function TasksScreen() {
   const [name, setName] = useState("");
@@ -32,13 +33,15 @@ export default function TasksScreen() {
 
   const fetchTasks = async () => {
     if (auth.currentUser) {
-      const fetchedTasks = await getAllTasks(auth.currentUser.uid);
-      if (fetchedTasks) {
-        setTasks(fetchedTasks.map((task) => ({
-          ...task,
-          inEdit: false
-        })));
-      };
+      await getAllTasks(auth.currentUser.uid)
+      .then((fetchedTasks) => {
+        if (fetchedTasks) {
+          setTasks(fetchedTasks.map((task) => ({
+            ...task,
+            inEdit: false
+          })));
+        }
+      });
     }
   };
 
@@ -58,7 +61,7 @@ export default function TasksScreen() {
 
   const checkTask = async (task: Task) => {
     if (auth.currentUser) {
-      await updateTask(auth.currentUser.uid, task, !task.completed)
+      await completeTask(auth.currentUser.uid, task, !task.completed)
         .then(fetchTasks);
     }
   };
