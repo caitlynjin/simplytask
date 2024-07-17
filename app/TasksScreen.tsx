@@ -156,7 +156,7 @@ const TasksScreen = () => {
         {/* Tasks UI */}
         {tasks.map((task) => (
           <View key={task.id}>
-            <View key={task.id} style={styles.taskContainer}>
+            <View style={styles.taskContainer}>
               <View style={styles.taskLeftPart}>
                 {task.inEdit
                   // In edit state
@@ -189,7 +189,7 @@ const TasksScreen = () => {
               </View>
             </View>
 
-            <View style={styles.addTaskBodyContainer}>
+            <View style={styles.taskBodyContainer}>
               {task.inEdit
                 ? <TextInput
                   onFocus={() => setDescription(task.description)}
