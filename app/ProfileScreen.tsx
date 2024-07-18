@@ -8,6 +8,7 @@ import {
 import { ProfileProp } from "./_layout";
 
 const ProfileScreen = ({ navigation }: ProfileProp) => {
+  /* Sign out of application and send to login/signup screen */
   const signOut = async () => {
     try {
       await auth.signOut()

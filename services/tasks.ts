@@ -9,6 +9,9 @@ import {
 } from 'firebase/firestore';
 import { db } from '@/firebaseConfig';
 
+/**
+ * The model for a task
+ */
 export class Task {
   id: string;
   completed: boolean;
@@ -31,6 +34,12 @@ export class Task {
   }
 }
 
+/**
+ * Create and store this task under this user in Firebase database
+ * @param userId The id of this user
+ * @param name The name of this task
+ * @param description The description of this task
+ */
 export const createTask = async (
   userId: string,
   name: string,
@@ -55,6 +64,11 @@ export const createTask = async (
   }
 };
 
+/**
+ * Fetches all tasks of this user from Firebase database
+ * @param userId The id of this user
+ * @returns The list of task objects
+ */
 export const getAllTasks = async (userId: string) => {
   try {
     const userTasksRef = collection(db, "users", userId, "tasks");
@@ -74,6 +88,14 @@ export const getAllTasks = async (userId: string) => {
   }
 };
 
+/**
+ * Updates the existing task of this user in Firebase database
+ * @param userId The id of this user
+ * @param task The existing task object to update
+ * @param completed The new completed state of this task
+ * @param description The new description of this task
+ * @param name The new name of this task
+ */
 export const updateTask = async (
   userId: string,
   task: Task,
@@ -93,6 +115,12 @@ export const updateTask = async (
   }
 };
 
+/**
+ * Sets the task of this user as complete or incomplete in Firebase database
+ * @param userId The id of this user
+ * @param task The task to update
+ * @param completed The new completed state of this task
+ */
 export const completeTask = async (
   userId: string,
   task: Task,
@@ -109,6 +137,11 @@ export const completeTask = async (
   }
 }
 
+/**
+ * Deletes the task of this user in Firebase database
+ * @param userId The id of this user
+ * @param task The task to delete
+ */
 export const deleteTask = async (userId: string, task: Task) => {
   try {
     const taskRef = doc(db, "users", userId, "tasks", task.id);

@@ -20,6 +20,11 @@ import {
 } from "react-native";
 import { TasksProp } from './_layout';
 
+/**
+ * The local task type
+ *
+ * inEdit is the state of whether the task is currently being edited
+ */
 type Task = {
   id: string;
   completed: boolean;
@@ -36,6 +41,7 @@ const TasksScreen = ({ navigation }: TasksProp) => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [addTaskToggled, setAddTaskToggled] = useState(false);
 
+  /* Fetches all tasks and sets the local inEdit property */
   const fetchTasks = async () => {
     if (auth.currentUser) {
       await getAllTasks(auth.currentUser.uid)
@@ -50,10 +56,12 @@ const TasksScreen = ({ navigation }: TasksProp) => {
     }
   };
 
+  /* Ends editing of task without changes */
   const cancelNewTask = async () => {
     setAddTaskToggled(false);
   };
 
+  /* Adds the new task and finishes add task prompt */
   const addNewTask = async () => {
     if (auth.currentUser && name) {
       await createTask(auth.currentUser.uid, name, description)
@@ -64,6 +72,7 @@ const TasksScreen = ({ navigation }: TasksProp) => {
     setDescription("");
   };
 
+  /* Checks the task complete or unchecks the task as incomplete */
   const checkTask = async (task: Task) => {
     if (auth.currentUser) {
       await completeTask(auth.currentUser.uid, task, !task.completed)
@@ -71,6 +80,7 @@ const TasksScreen = ({ navigation }: TasksProp) => {
     }
   };
 
+  /* Sets the task in edit mode */
   const editTask = async (taskId: string) => {
     setTasks((prevTasks) =>
       prevTasks.map((prevTask) =>
@@ -82,6 +92,7 @@ const TasksScreen = ({ navigation }: TasksProp) => {
     );
   };
 
+  /* Closes edit mode and updates the task */
   const doneEditTask = async (task: Task) => {
     setTasks((prevTasks) =>
       prevTasks.map((prevTask) =>
@@ -100,6 +111,7 @@ const TasksScreen = ({ navigation }: TasksProp) => {
     }
   };
 
+  /* Removes the task from the list */
   const removeTask = async (task: Task) => {
     if (auth.currentUser) {
       await deleteTask(auth.currentUser.uid, task)
@@ -107,6 +119,7 @@ const TasksScreen = ({ navigation }: TasksProp) => {
     }
   };
 
+  /* Refreshes the page */
   const onRefresh = () => {
     setRefreshing(true);
     fetchTasks()
@@ -125,7 +138,7 @@ const TasksScreen = ({ navigation }: TasksProp) => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        {/* Add task UI */}
+        {/* Add task */}
         {!addTaskToggled ?
           <TouchableOpacity
             onPress={() => setAddTaskToggled(true)}
@@ -136,6 +149,7 @@ const TasksScreen = ({ navigation }: TasksProp) => {
           </TouchableOpacity>
         : undefined}
 
+        {/* Add task in creation mode */}
         {addTaskToggled ?
           <View>
             <View style={styles.addTaskContainer}>
@@ -169,20 +183,20 @@ const TasksScreen = ({ navigation }: TasksProp) => {
           </View>
         : undefined}
 
-        {/* Tasks UI */}
+        {/* List of tasks */}
         {tasks.map((task) => (
           <View key={task.id}>
             <View style={styles.taskContainer}>
               <View style={styles.taskLeftPart}>
                 {task.inEdit
-                  // In edit state
+                  // Display trash icon in edit mode to delete task
                   ? <TouchableOpacity onPress={() => removeTask(task)}>
                     <Image
                       source={require('@/assets/images/trash.png')}
                       style={styles.checkboxIcon}
                     />
                   </TouchableOpacity>
-                  // Normal state
+                  // Display checkbox icon to change task complete state
                   : <TouchableOpacity onPress={() => checkTask(task)}>
                     <Image
                       source={
@@ -194,6 +208,7 @@ const TasksScreen = ({ navigation }: TasksProp) => {
                     />
                   </TouchableOpacity>}
                 {task.inEdit
+                // Display name text input in edit mode
                 ? <TextInput
                   onFocus={() => setName(task.name)}
                   onChangeText={(text) => setName(text)}
@@ -201,12 +216,14 @@ const TasksScreen = ({ navigation }: TasksProp) => {
                   style={styles.nameTextInput}
                   value={name}
                 />
+                // Display task name
                 : <CustomText type="mediumTitle">{task.name}</CustomText>}
               </View>
             </View>
 
             <View style={styles.taskBodyContainer}>
               {task.inEdit
+                // Display description text input in edit mode
                 ? <TextInput
                   onFocus={() => setDescription(task.description)}
                   onChangeText={(text) => setDescription(text)}
@@ -214,19 +231,20 @@ const TasksScreen = ({ navigation }: TasksProp) => {
                   style={styles.descriptionTextInput}
                   value={description}
                 />
+                // Display task description
                 : <CustomText type="body" style={{ width: 260 }}>
                   {task.description}
                 </CustomText>}
 
               {task.inEdit
-                // Edit state
+                // Display check in edit mode to finish editing
                 ? <TouchableOpacity onPress={() => {doneEditTask(task)}}>
                   <Image
                     source={require('@/assets/images/check.png')}
                     style={styles.checkIcon}
                   />
                 </TouchableOpacity>
-                // Normal state
+                // Display edit icon to start editing
                 : <TouchableOpacity onPress={() => {editTask(task.id)}}>
                   <Image
                     source={require('@/assets/images/edit.png')}

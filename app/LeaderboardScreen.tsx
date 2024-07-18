@@ -17,14 +17,12 @@ const LeaderboardScreen = ({ navigation }: LeaderboardProp) => {
 
   const filters = ["All Time", "Daily", "Weekly", "Monthly"];
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
+  /* Refreshes users list when selecting another filter */
   useEffect(() => {
     fetchUsers();
   }, [selectedFilter]);
 
+  /* Fetches all user objects filtered by the selected filter */
   const fetchUsers = async () => {
     await getAllUsersFilteredBy(selectedFilter)
     .then((fetchedUsers) => {
@@ -32,6 +30,7 @@ const LeaderboardScreen = ({ navigation }: LeaderboardProp) => {
     });
   };
 
+  /* Refreshes the page */
   const onRefresh = () => {
     setRefreshing(true);
     fetchUsers()
@@ -50,7 +49,7 @@ const LeaderboardScreen = ({ navigation }: LeaderboardProp) => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        {/* Filter UI */}
+        {/* Filter buttons */}
         <View style={styles.filterContainer}>
           {filters.map((filter) => (
             <TouchableOpacity
@@ -69,7 +68,7 @@ const LeaderboardScreen = ({ navigation }: LeaderboardProp) => {
           ))}
         </View>
 
-        {/* User leaderboard UI */}
+        {/* List of users on leaderboard */}
         {users.map((user) => (
           <View key={user.userId}>
             <View style={styles.userContainer}>

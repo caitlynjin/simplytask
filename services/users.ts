@@ -6,6 +6,9 @@ import {
 } from 'firebase/firestore';
 import { db } from '@/firebaseConfig';
 
+/**
+ * The model for a user
+ */
 export class User {
   userId: string;
   email: string;
@@ -22,6 +25,11 @@ export class User {
   }
 };
 
+/**
+ * Create and store this user in Firebase database
+ * @param userId The id of this user
+ * @param email The email of this user
+ */
 export const createUser = async (userId: string, email: string) => {
   try {
     const userRef = doc(db, "users", userId)
@@ -34,6 +42,14 @@ export const createUser = async (userId: string, email: string) => {
   }
 };
 
+/**
+ * Fetches all completed tasks of this user in this time period from Firebase
+ * database
+ * @param userId The id of this user
+ * @param timePeriod The time period to get completed tasks from (Daily, Weekly,
+ *                   Monthly, or defaulted to All Time)
+ * @returns The list of completed tasks in this time period
+ */
 export const getCompletedTasksFilteredBy = async (
   userId: string,
   timePeriod: string
@@ -91,6 +107,15 @@ export const getCompletedTasksFilteredBy = async (
   }
 };
 
+/**
+ * Fetches all users and creates user objects with the number of completed tasks
+ * in this time period from Firebase database
+ * database
+ * @param timePeriod The time period to get completed tasks from (Daily, Weekly,
+ *                   Monthly, or defaulted to All Time)
+ * @returns The list of user objects with completed task amounts within this time
+ *          period
+ */
 export const getAllUsersFilteredBy = async(timePeriod: string) => {
   try {
     // Get the list of users and amount of tasks completed

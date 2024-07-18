@@ -21,6 +21,7 @@ const SignUpScreen = ({ navigation }: SignUpScreenProp) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  /* Signs up the new user or signs in the existing user */
   const handleUser = async () => {
     console.log("Handle user")
     createUserWithEmailAndPassword(auth, email, password)
@@ -54,6 +55,7 @@ const SignUpScreen = ({ navigation }: SignUpScreenProp) => {
             </CustomText>
           </View>
 
+          {/* Text inputs for email and password */}
           <View style={styles.inputContainer}>
             <View style={{ gap: 4 }}>
             <CustomText type="subtitle">Email</CustomText>
@@ -74,6 +76,7 @@ const SignUpScreen = ({ navigation }: SignUpScreenProp) => {
             </View>
           </View>
 
+          {/* Sign up or log in button */}
           <TouchableOpacity
             onPress={() => { handleUser() }}
           >
