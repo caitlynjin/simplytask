@@ -6,7 +6,7 @@ import {
   deleteTask,
   completeTask,
 } from '@/services/tasks';
-import { } from 'firebase/firestore'
+import { Timestamp } from 'firebase/firestore'
 import { CustomText } from "@/components/CustomText";
 import React, { useState, useEffect } from "react";
 import {
@@ -23,7 +23,7 @@ import { TasksProp } from './_layout';
 type Task = {
   id: string;
   completed: boolean;
-  completedAt: Date;
+  completedAt: Timestamp;
   description: string;
   name: string;
   inEdit: boolean;

@@ -5,20 +5,21 @@ import {
   getDocs,
   updateDoc,
   deleteDoc,
+  Timestamp,
 } from 'firebase/firestore';
 import { db } from '@/firebaseConfig';
 
 export class Task {
   id: string;
   completed: boolean;
-  completedAt: Date;
+  completedAt: Timestamp;
   description: string;
   name: string;
 
   constructor(
     id: string,
     completed: boolean,
-    completedAt: Date,
+    completedAt: Timestamp,
     description: string,
     name: string
   ) {
