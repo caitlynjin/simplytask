@@ -34,7 +34,10 @@ export const createUser = async (userId: string, email: string) => {
   }
 };
 
-export const getCompletedTasksFilteredBy = async (userId: string, timePeriod: string) => {
+export const getCompletedTasksFilteredBy = async (
+  userId: string,
+  timePeriod: string
+) => {
   try {
     const tasksRef = collection(db, "users", userId, "tasks");
     const tasksSnap = await getDocs(tasksRef);
@@ -67,8 +70,8 @@ export const getCompletedTasksFilteredBy = async (userId: string, timePeriod: st
       const completedTasks = tasks.filter((task) => task.completed);
       return completedTasks;
     }
-  } catch (error) {
-    console.log("Error getting all filtered completed tasks of user", userId, error);
+  } catch (_) {
+    // In the case that user has not created a task
     return [];
   }
 };
@@ -92,9 +95,8 @@ export const getAllUsersFilteredBy = async(timePeriod: string) => {
       return user2.tasksCompleted - user1.tasksCompleted;
     });
     return usersSorted;
-  } catch (error) {
-    console.log("Error getting all users sorted by task completions and \
-      filtered by time period", error);
+  } catch (_) {
+    // In the case that user has not created a task
     return [];
   }
 };
