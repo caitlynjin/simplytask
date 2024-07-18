@@ -41,6 +41,11 @@ const TasksScreen = ({ navigation }: TasksProp) => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [addTaskToggled, setAddTaskToggled] = useState(false);
 
+  /* Fetches tasks when opened */
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
   /* Fetches all tasks and sets the local inEdit property */
   const fetchTasks = async () => {
     if (auth.currentUser) {
