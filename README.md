@@ -1,8 +1,8 @@
-# Welcome to your simplytask
+# simplytask
 
 This is a simple task manager app created by Caitlyn Jin.
 
-## Get started
+## Setup Instructions
 
 1. Install dependencies
 
