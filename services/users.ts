@@ -56,7 +56,6 @@ export const getCompletedTasksFilteredBy = async (
             && date.getDate() === today.getDate()
           );
         });
-        console.log(dailyCompletedTasks.length);
         return dailyCompletedTasks;
       case "Weekly":
         const startOfWeek = today.getDate() - today.getDay();
