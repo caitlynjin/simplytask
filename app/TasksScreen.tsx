@@ -15,7 +15,8 @@ import {
   TouchableOpacity,
   Image,
   TextInput,
-  ScrollView
+  ScrollView,
+  RefreshControl
 } from "react-native";
 import { TasksProp } from './_layout';
 
@@ -29,14 +30,11 @@ type Task = {
 }
 
 const TasksScreen = ({ navigation }: TasksProp) => {
+  const [refreshing, setRefreshing] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [tasks, setTasks] = useState<Task[]>([]);
   const [addTaskToggled, setAddTaskToggled] = useState(false);
-
-  useEffect(() => {
-    fetchTasks();
-  }, []);
 
   const fetchTasks = async () => {
     if (auth.currentUser) {
@@ -109,13 +107,24 @@ const TasksScreen = ({ navigation }: TasksProp) => {
     }
   };
 
+  const onRefresh = () => {
+    setRefreshing(true);
+    fetchTasks()
+      .then(() => setRefreshing(false));
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
         <CustomText type="title">My Tasks</CustomText>
       </View>
 
-      <ScrollView style={styles.contentContainer}>
+      <ScrollView
+        style={styles.contentContainer}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         {/* Add task UI */}
         {!addTaskToggled ?
           <TouchableOpacity
