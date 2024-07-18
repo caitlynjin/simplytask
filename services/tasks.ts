@@ -101,7 +101,7 @@ export const completeTask = async (
     const taskRef = doc(db, "users", userId, "tasks", task.id);
     await updateDoc(taskRef, {
       completed: completed,
-      completedAt: completed ? Date.now() : null
+      completedAt: completed ? new Date() : null
     });
   } catch (error) {
     console.error("Error completing task", error);

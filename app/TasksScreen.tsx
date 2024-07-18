@@ -256,8 +256,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingHorizontal: 32,
-    marginTop: 32,
-    marginBottom: 96
+    marginVertical: 32
   },
   addTaskContainer: {
     flexDirection: "row",
