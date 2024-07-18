@@ -4,12 +4,14 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-  ScrollView
+  ScrollView,
+  RefreshControl
 } from "react-native";
 import { User, getAllUsersFilteredBy } from '@/services/users';
 import { LeaderboardProp } from "./_layout";
 
 const LeaderboardScreen = ({ navigation }: LeaderboardProp) => {
+  const [refreshing, setRefreshing] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState("All Time");
   const [users, setUsers] = useState<User[]>([]);
 
@@ -30,13 +32,24 @@ const LeaderboardScreen = ({ navigation }: LeaderboardProp) => {
     });
   };
 
+  const onRefresh = () => {
+    setRefreshing(true);
+    fetchUsers()
+      .then(() => setRefreshing(false));
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
         <CustomText type="title">Leaderboard</CustomText>
       </View>
 
-      <ScrollView style={styles.contentContainer}>
+      <ScrollView
+        style={styles.contentContainer}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         {/* Filter UI */}
         <View style={styles.filterContainer}>
           {filters.map((filter) => (
