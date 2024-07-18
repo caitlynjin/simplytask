@@ -1,6 +1,6 @@
 # simplytask
 
-This is a simple task manager app created by Caitlyn Jin.
+A simple task manager app created by Caitlyn Jin.
 
 ## Setup Instructions
 
