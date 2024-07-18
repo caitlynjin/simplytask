@@ -43,32 +43,48 @@ export const getCompletedTasksFilteredBy = async (
     const tasksSnap = await getDocs(tasksRef);
     const tasks = tasksSnap.docs.map((taskDoc) => taskDoc.data());
 
-    if (timePeriod === "Daily") {
-      const today = new Date().getDate();
-      const completedTasks = tasks.filter((task) => {
-        task.completedAt.getDate() === today && task.completed
-      });
-      return completedTasks;
-    } else if (timePeriod === "Weekly") {
-      const today = new Date();
-      const startOfWeek = today.getDate() - today.getDay();
-      const endOfWeek = startOfWeek + 6;
+    const today = new Date();
 
-      const completedTasks = tasks.filter((task) => {
-        task.completedAt.getDate() >= startOfWeek
-        && task.completedAt.getDate() <= endOfWeek
-        && task.completed
-      });
-      return completedTasks;
-    } else if (timePeriod === "Monthly") {
-      const thisMonth = new Date().getMonth();
-      const completedTasks = tasks.filter((task) => {
-        task.completedAt.getMonth() === thisMonth && task.completed
-      });
-      return completedTasks;
-    } else {
-      const completedTasks = tasks.filter((task) => task.completed);
-      return completedTasks;
+    switch (timePeriod) {
+      case "Daily":
+        const dailyCompletedTasks = tasks.filter((task) => {
+          const date = task.completedAt.toDate();
+          return (
+            task.completed
+            && date.getFullYear() === today.getFullYear()
+            && date.getMonth() === today.getMonth()
+            && date.getDate() === today.getDate()
+          );
+        });
+        console.log(dailyCompletedTasks.length);
+        return dailyCompletedTasks;
+      case "Weekly":
+        const startOfWeek = today.getDate() - today.getDay();
+        const endOfWeek = startOfWeek + 6;
+
+        const weeklyCompletedTasks = tasks.filter((task) => {
+          const date = task.completedAt.toDate();
+          return (
+            task.completed
+            && date.getFullYear() === today.getFullYear()
+            && date.getMonth() === today.getMonth()
+            && date.getDate() >= startOfWeek && date.getDate() <= endOfWeek
+          );
+        });
+        return weeklyCompletedTasks;
+      case "Monthly":
+        const monthlyCompletedTasks = tasks.filter((task) => {
+          const date = task.completedAt.toDate();
+          return (
+            task.completed
+            && date.getFullYear() === today.getFullYear()
+            && date.getMonth() === today.getMonth()
+          );
+        });
+        return monthlyCompletedTasks;
+      default:
+        const completedTasks = tasks.filter((task) => task.completed);
+        return completedTasks;
     }
   } catch (_) {
     // In the case that user has not created a task
