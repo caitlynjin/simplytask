@@ -1,10 +1,12 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import TasksScreen from './TasksScreen';
 import LeaderboardScreen from './LeaderboardScreen';
+import ProfileScreen from './ProfileScreen';
+import { BottomNavProp, RootStackParamList } from './_layout';
 
-const Tab = createBottomTabNavigator();
+const BottomNav = ({ navigation }: BottomNavProp) => {
+  const Tab = createBottomTabNavigator<RootStackParamList>();
 
-const BottomNav = () => {
   return (
     <Tab.Navigator
       initialRouteName="Tasks"
@@ -23,8 +25,17 @@ const BottomNav = () => {
         component={TasksScreen}
         options={{ headerShown: false }}
       />
+      <Tab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{ headerShown: false }}
+      />
     </Tab.Navigator>
   );
 }
 
 export default BottomNav;
+
+function createNativeStackNavigator<T>() {
+  throw new Error('Function not implemented.');
+}

@@ -7,8 +7,9 @@ import {
   ScrollView
 } from "react-native";
 import { User, getAllUsersFilteredBy } from '@/services/users';
+import { LeaderboardProp } from "./_layout";
 
-const LeaderboardScreen = () => {
+const LeaderboardScreen = ({ navigation }: LeaderboardProp) => {
   const [selectedFilter, setSelectedFilter] = useState("All Time");
   const [users, setUsers] = useState<User[]>([]);
 

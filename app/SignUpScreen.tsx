@@ -15,9 +15,9 @@ import {
   TouchableWithoutFeedback,
   Keyboard
 } from "react-native";
-import { Props } from './_layout';
+import { SignUpScreenProp } from './_layout';
 
-const SignUpScreen = ({ navigation }: Props) => {
+const SignUpScreen = ({ navigation }: SignUpScreenProp) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 

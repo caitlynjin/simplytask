@@ -17,6 +17,7 @@ import {
   TextInput,
   ScrollView
 } from "react-native";
+import { TasksProp } from './_layout';
 
 type Task = {
   id: string;
@@ -27,7 +28,7 @@ type Task = {
   inEdit: boolean;
 }
 
-const TasksScreen = () => {
+const TasksScreen = ({ navigation }: TasksProp) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [tasks, setTasks] = useState<Task[]>([]);
