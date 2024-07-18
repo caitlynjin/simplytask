@@ -6,13 +6,7 @@ import {
   TouchableOpacity,
   ScrollView
 } from "react-native";
-import { getAllUsersSorted } from '@/services/users';
-
-type User = {
-  userId: string,
-  email: string,
-  tasksCompleted: number
-}
+import { User, getAllUsersFilteredBy } from '@/services/users';
 
 const LeaderboardScreen = () => {
   const [selectedFilter, setSelectedFilter] = useState("All Time");
@@ -29,7 +23,7 @@ const LeaderboardScreen = () => {
   }, [selectedFilter]);
 
   const fetchUsers = async () => {
-    await getAllUsersSorted()
+    await getAllUsersFilteredBy(selectedFilter)
     .then((fetchedUsers) => {
       setUsers(fetchedUsers)
     });

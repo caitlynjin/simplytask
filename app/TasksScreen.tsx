@@ -1,5 +1,11 @@
 import { auth } from '@/firebaseConfig';
-import { createTask, getAllTasks, updateTask, deleteTask, completeTask } from '@/services/tasks';
+import {
+  createTask,
+  getAllTasks,
+  updateTask,
+  deleteTask,
+  completeTask,
+} from '@/services/tasks';
 import { } from 'firebase/firestore'
 import { CustomText } from "@/components/CustomText";
 import React, { useState, useEffect } from "react";

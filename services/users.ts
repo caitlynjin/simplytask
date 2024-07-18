@@ -20,7 +20,7 @@ export class User {
     this.email = email;
     this.tasksCompleted = tasksCompleted;
   }
-}
+};
 
 export const createUser = async (userId: string, email: string) => {
   try {
@@ -34,34 +34,56 @@ export const createUser = async (userId: string, email: string) => {
   }
 };
 
-export const getCompletedTasks = async (userId: string) => {
+export const getCompletedTasksFilteredBy = async (userId: string, timePeriod: string) => {
   try {
     const tasksRef = collection(db, "users", userId, "tasks");
     const tasksSnap = await getDocs(tasksRef);
     const tasks = tasksSnap.docs.map((taskDoc) => taskDoc.data());
 
-    const completedTasks = tasks.filter((task) => task.completed);
-    return completedTasks;
+    if (timePeriod === "Daily") {
+      const today = new Date().getDate();
+      const completedTasks = tasks.filter((task) => {
+        task.completedAt.getDate() === today && task.completed
+      });
+      return completedTasks;
+    } else if (timePeriod === "Weekly") {
+      const today = new Date();
+      const startOfWeek = today.getDate() - today.getDay();
+      const endOfWeek = startOfWeek + 6;
+
+      const completedTasks = tasks.filter((task) => {
+        task.completedAt.getDate() >= startOfWeek
+        && task.completedAt.getDate() <= endOfWeek
+        && task.completed
+      });
+      return completedTasks;
+    } else if (timePeriod === "Monthly") {
+      const thisMonth = new Date().getMonth();
+      const completedTasks = tasks.filter((task) => {
+        task.completedAt.getMonth() === thisMonth && task.completed
+      });
+      return completedTasks;
+    } else {
+      const completedTasks = tasks.filter((task) => task.completed);
+      return completedTasks;
+    }
   } catch (error) {
-    console.log("Error getting all completed tasks of user", userId, error);
+    console.log("Error getting all filtered completed tasks of user", userId, error);
     return [];
   }
-}
+};
 
-export const getAllUsersSorted = async () => {
+export const getAllUsersFilteredBy = async(timePeriod: string) => {
   try {
-    // Get the list of users and the amount of tasks completed
+    // Get the list of users and amount of tasks completed
     const usersRef = collection(db, "users");
     const usersSnap = await getDocs(usersRef);
     const usersPromise = usersSnap.docs.map(async (userDoc) => {
-      const taskCount = (await getCompletedTasks(userDoc.id)).length;
-      return (
-        new User(
-          userDoc.id,
-          userDoc.get("email"),
-          taskCount
-        )
-      );
+      const taskCount = (await getCompletedTasksFilteredBy(
+        userDoc.id,
+        timePeriod
+      )).length;
+      return (new User(userDoc.id, userDoc.get("email"), taskCount));
     });
     const users = await Promise.all(usersPromise);
 
@@ -71,7 +93,8 @@ export const getAllUsersSorted = async () => {
     });
     return usersSorted;
   } catch (error) {
-    console.log("Error getting all users sorted by number of completions", error);
+    console.log("Error getting all users sorted by task completions and \
+      filtered by time period", error);
     return [];
   }
-}
+};
